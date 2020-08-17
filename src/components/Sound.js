@@ -3,12 +3,12 @@ import {
     View,
     Text,
     Image,
-    Alert
+    Alert,
+    TouchableOpacity
 } from 'react-native'
 import styles from '../Styles'
-import { Icon } from 'react-native-elements'
-import 'react-native-gesture-handler';
-
+import 'react-native-gesture-handler'
+import { FontAwesome5 } from "@expo/vector-icons"
 
 
 class Sound extends Component {
@@ -20,20 +20,32 @@ class Sound extends Component {
     }
 
     render() {
-        return (
-            <View style={styles.containerSounds}>
-                <View style={styles.imageContainer}>
-                    <Image style={styles.imageSound} source={{ uri: `${this.props.sound.thumb_image_url}` }} />
+            return (
+                <View style={styles.containerSounds}>
+                    <View style={styles.imageContainer}>
+                        <Image style={styles.imageSound}
+                            source={{ uri: `${this.props.sound.thumb_image_url}` }} />
+                    </View>
+                    <View style={styles.textList}>
+                        <Text onPress={() => {
+                            Alert.alert(`${this.props.sound.title}`,
+                                `${this.props.sound.description}`)
+                        }}
+                            style={styles.textTitle}>{this.props.sound.title}</Text>
+                    </View>
+                    <View style={styles.iconPlay}>
+                        <TouchableOpacity style={styles.playButtonContainer2} onPress={() => { this.props.onSoundPress(this.props.sound)}}>
+                            <FontAwesome5
+                                name="play"
+                                size={22}
+                                color="#3D425C"
+                                style={styles.playButton}
+                            ></FontAwesome5>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={styles.textList}>
-                    <Text onPress={() => { Alert.alert(`${this.props.sound.title}`, `${this.props.sound.description}`) }} style={styles.textTitle}>{this.props.sound.title}</Text>
-                </View>
-                <View style={styles.iconPlay}>
-                    <Icon name='play' type='font-awesome' color='#3f51b5' onPress={() => {}} />
-                </View>
-            </View>
-        )
+            )
+        }
     }
-}
 
-export default Sound
+    export default Sound

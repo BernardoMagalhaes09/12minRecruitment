@@ -1,86 +1,125 @@
 
-import React, {Component} from "react";
-import {Text, View, Image, SafeAreaView, TouchableOpacity } from "react-native";
-import Slider from "react-native-slider";
-import Moment from "moment";
-import { FontAwesome5 } from "@expo/vector-icons";
+import React, { Component } from "react"
+import { Text, View, Image, SafeAreaView, TouchableOpacity } from "react-native"
+import Slider from '@react-native-community/slider'
+import Moment from "moment"
+import { FontAwesome5, AntDesign } from "@expo/vector-icons"
 import styles from '../Styles'
-import axios from 'axios'
+import { Audio } from 'expo-av'
+import 'react-native-gesture-handler'
+
+const soundObject = new Audio.Sound()
 
 class SoundPlayer extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            database: {},
-            trackLength: 300,
-            timeElapsed: "0:00",
-            timeRemaining: "5:00"
+            trackLength: 9999,
+            timeElapsed: '0:00',
+            timeRemaining: null,
+            isPlay: true,
+            value: 0,
+            status: {},
+            seconds: 0,
         }
     }
 
-    async componentDidMount() {
-        await axios.get('https://run.mocky.io/v3/96f0177a-118f-43b8-9c99-e84e3dc3fa81')
-            .then(res => this.setState({ database: Object.assign({}, res.data.data)}))
-            .catch(err => { console.log(err); })
+    async playSound() {
+        try {
+            await soundObject.loadAsync({ uri: `${this.props.route.params.sound.audio_url}` })
+            await soundObject.playAsync()
+            setTimeout(async () => {
+                const soundStatus = await soundObject.getStatusAsync()
+                this.setState({status: soundStatus})
+                }, 300)
+        } catch (err) {
+            console.log('err: ', err);
+        }
+    } catch(err) {
+        console.log('err: ', err);
     }
 
-    changeTime = seconds => {
-        this.setState({ timeElapsed: Moment.utc(seconds * 1000).format("m:ss") });
-        this.setState({ timeRemaining: Moment.utc((this.state.trackLength - seconds) * 1000).format("m:ss") });
-    };
+    changeTime = () => {
+        this.setState({ timeElapsed: Moment.utc(this.state.seconds * 1000).format('m:ss') })
+        this.setState({ timeRemaining: Moment.utc((this.state.trackLength - this.state.seconds) * 1000).format('m:ss') })
+    }
+
+    playPause = () => {
+        if (this.state.isPlay === true) {
+            soundObject.pauseAsync()
+            this.setState({ isPlay: !this.state.isPlay })
+        } else if (this.state.isPlay === false) {
+            soundObject.playAsync()
+            this.setState({ isPlay: !this.state.isPlay })
+        }
+    }
+
+    chanceButton = () => {
+        this.setState({ isPlay: !this.state.isPlay })
+        this.playPause()
+    }
 
     render() {
+        { this.playSound() }
         return (
             <SafeAreaView style={styles.containerPlayer}>
-                <View style={{ alignItems: "center" }}>
-                    <View style={{ alignItems: "center", marginTop: 30 }}>
-                        <Text style={[styles.textLight, { fontSize: 12 }]}>PLAYLIST</Text>
-                        <Text style={[styles.text, { fontSize: 15, fontWeight: "500", marginTop: 8 }]}>
-                            Subscribe to DesignIntoCode
-                            {console.log(this.state.database)}
-                        </Text>
+                <View>
+                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('ListSounds'), soundObject.unloadAsync() }}>
+                        <AntDesign style={styles.backButton} name="leftcircleo" size={24} color="black" />
+                    </TouchableOpacity>
+                </View>
+                <View style={{ alignItems: 'center' }}>
+                    <View style={{ alignItems: 'center', marginTop: 30 }}>
+                        <Text style={[styles.textLight, { fontSize: 12 }]}>Processo Seletivo</Text>
+                        <Text style={[styles.text, { fontSize: 15, fontWeight: '500', marginTop: 8 }]}>
+                            App 12 min
+                            </Text>
                     </View>
-                    <View style = {styles.coverContainer}>
-                        <Image style={styles.cover} source={{ uri: 'https://cdn.12min.com/books/books_background/163_chief_customer.site_thumb.jpg?1497471445' }} />
+                    <View style={styles.coverContainer}>
+                        <Image style={styles.cover} source={{ uri: `${this.props.route.params.sound.medium_image_url}` }} />
                     </View>
-                    <View style={{ alignItems: "center", marginTop: 10 }}>
-                        <Text style={[styles.textDark, { fontSize: 20, fontWeight: "500" }]}>Exhale</Text>
-                        <Text style={[styles.text, { fontSize: 16, marginTop: 8 }]}>Jeremy Blake</Text>
+                    <View style={{ alignItems: 'center', marginTop: 10 }}>
+                        <Text style={[styles.textDark, { fontSize: 20, fontWeight: '500' }]}>{this.props.route.params.sound.title}</Text>
+                        <Text style={[styles.text, { fontSize: 16, marginTop: 8 }]}>{this.props.route.params.sound.author}</Text>
                     </View>
                 </View>
 
                 <View style={{ margin: 15 }}>
-                    <Slider
+                    < Slider
+                        style={{ width: '100%', height: 40 }}
+                        onValueChange={0}
+                        onSlidingComplete={0}
                         minimumValue={0}
                         maximumValue={this.state.trackLength}
-                        trackStyle={styles.track}
-                        thumbStyle={styles.thumb}
-                        minimumTrackTintColor="#93A8B3"
-                        onValueChange={seconds => this.changeTime(seconds)}
+                        minimumTrackTintColor='#3f51b5'
+                        maximumTrackTintColor="#93A8B3"
                     ></Slider>
-                    <View style={{ marginTop: -12, flexDirection: "row", justifyContent: "space-between" }}>
-                        <Text style={[styles.textLight, styles.timeStamp]}>{this.state.timeElapsed}</Text>
-                        <Text style={[styles.textLight, styles.timeStamp]}>{this.state.timeRemaining}</Text>
-                    </View>
+                <View style={{ marginTop: -12, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={[styles.textLight, styles.timeStamp]}>{this.state.timeElapsed}</Text>
+                    <Text style={[styles.textLight, styles.timeStamp]}>{this.state.timeRemaining}</Text>
+                </View>
                 </View>
 
-                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: 16 }}>
-                    <TouchableOpacity>
-                        <FontAwesome5 name="backward" size={32} color="#93A8B3"></FontAwesome5>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.playButtonContainer}>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
+                <TouchableOpacity style={styles.playButtonContainer} onPress={this.chanceButton}>
+                    {this.state.isPlay ? (
                         <FontAwesome5
-                            name="play"
+                            name='pause'
                             size={32}
-                            color="#3D425C"
-                            style={[styles.playButton, { marginLeft: 8 }]}
-                        ></FontAwesome5>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <FontAwesome5 name="forward" size={32} color="#93A8B3"></FontAwesome5>
-                    </TouchableOpacity>
-                </View>
-            </SafeAreaView>
+                            color='#3D425C'
+                            style={[styles.playButton, { marginLeft: 8 }]}>
+                        </FontAwesome5>
+                    ) : (
+                            <FontAwesome5
+                                name='play'
+                                size={32}
+                                color='#3D425C'
+                                style={[styles.playButton, { marginLeft: 8 }]}>
+                            </FontAwesome5>
+                        )}
+                </TouchableOpacity>
+            </View>
+            </SafeAreaView >
         );
     }
 }
