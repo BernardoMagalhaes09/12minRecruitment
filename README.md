@@ -7,11 +7,11 @@ An application for playing audiobooks
  <a href='#libraries'>Used Libraries</a> 
  <a href="#using">Using</a> • 
  <a href="#license">License</a> • 
- <a href="#author">Author</a>
+ <a href="#author">Author</a> • 
 </p>
 
 # Objective
-The objective of this app is to bring know to people in minutes. Just play and know will enter your ears.
+The purpose of this application is to bring knowledge to people in minutes. Just click and knowledge will be available in your ears.
 
 # Technologies
 <p>The technologies used in the application were:</p>
