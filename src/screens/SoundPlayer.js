@@ -1,8 +1,7 @@
 
 import React, { Component } from "react"
 import { Text, View, Image, SafeAreaView, TouchableOpacity } from "react-native"
-import Slider from '@react-native-community/slider'
-import Moment from "moment"
+import Slider from "react-native-slider";
 import { FontAwesome5, AntDesign } from "@expo/vector-icons"
 import styles from '../Styles'
 import { Audio } from 'expo-av'
@@ -30,9 +29,9 @@ class SoundPlayer extends Component {
             await soundObject.playAsync()
             setTimeout(async () => {
                 const soundStatus = await soundObject.getStatusAsync()
-                this.setState({status: soundStatus})
-                this.setState({ timeRemaining: this.time_convert(soundStatus.durationMillis/1000) })
-                }, 300)
+                this.setState({ status: soundStatus })
+                this.setState({ timeRemaining: this.time_convert(soundStatus.durationMillis / 1000) })
+            }, 300)
         } catch (err) {
             console.log('err: ', err);
         }
@@ -43,8 +42,8 @@ class SoundPlayer extends Component {
     time_convert(num) {
         var minutes = Math.floor(num / 60);
         var seconds = num % 60;
-        if (seconds<10) {
-            seconds = 0+`${seconds.toFixed(0)}`
+        if (seconds < 10) {
+            seconds = 0 + `${seconds.toFixed(0)}`
             return minutes + ":" + seconds;
         }
         return minutes + ":" + seconds.toFixed(0);
@@ -74,8 +73,8 @@ class SoundPlayer extends Component {
                         <AntDesign style={styles.backButton} name="leftcircleo" size={24} color="black" />
                     </TouchableOpacity>
                 </View>
-                <View style={{ alignItems: 'center' }}>
-                    <View style={{ alignItems: 'center', marginTop: 30 }}>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ alignItems: 'center', marginTop: 10 }}>
                         <Text style={[styles.textLight, { fontSize: 12 }]}>Processo Seletivo</Text>
                         <Text style={[styles.text, { fontSize: 15, fontWeight: '500', marginTop: 8 }]}>
                             App 12 min
@@ -84,47 +83,44 @@ class SoundPlayer extends Component {
                     <View style={styles.coverContainer}>
                         <Image style={styles.cover} source={{ uri: `${this.props.route.params.sound.medium_image_url}` }} />
                     </View>
-                    <View style={{ alignItems: 'center', marginTop: 10 }}>
+                    <View style={{ alignItems: 'center', marginTop: 5, justifyContent: 'center' }}>
                         <Text style={[styles.textDark, { fontSize: 20, fontWeight: '500' }]}>{this.props.route.params.sound.title}</Text>
                         <Text style={[styles.text, { fontSize: 16, marginTop: 8 }]}>{this.props.route.params.sound.author}</Text>
                     </View>
                 </View>
-
-                <View style={{ margin: 15 }}>
-                    < Slider
-                        style={{ width: '100%', height: 40 }}
-                        onValueChange={0}
-                        onSlidingComplete={0}
+                <View style={{ marginBottom: 32 }}>
+                    <Slider
                         minimumValue={0}
                         maximumValue={this.state.trackLength}
-                        minimumTrackTintColor='#3f51b5'
-                        maximumTrackTintColor="#93A8B3"
+                        trackStyle={styles.track}
+                        thumbStyle={styles.thumb}
+                        minimumTrackTintColor="#93A8B3"
                     ></Slider>
-                <View style={{ marginTop: -12, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={[styles.textLight, styles.timeStamp]}>{this.state.timeElapsed}</Text>
-                    <Text style={[styles.textLight, styles.timeStamp]}>{this.state.timeRemaining}</Text>
-                </View>
+                    <View style={{ marginTop: -12, flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={[styles.textLight, styles.timeStamp]}>{this.state.timeElapsed}</Text>
+                        <Text style={[styles.textLight, styles.timeStamp]}>{this.state.timeRemaining}</Text>
+                    </View>
                 </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 16 }}>
-                <TouchableOpacity style={styles.playButtonContainer} onPress={this.chanceButton}>
-                    {this.state.isPlay ? (
-                        <FontAwesome5
-                            name='pause'
-                            size={32}
-                            color='#3D425C'
-                            style={[styles.playButton, { marginLeft: 8 }]}>
-                        </FontAwesome5>
-                    ) : (
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: -20 }}>
+                    <TouchableOpacity style={styles.playButtonContainer} onPress={this.chanceButton}>
+                        {this.state.isPlay ? (
                             <FontAwesome5
-                                name='play'
+                                name='pause'
                                 size={32}
                                 color='#3D425C'
-                                style={[styles.playButton, { marginLeft: 8 }]}>
+                                style={[styles.playButton, { marginLeft: 5 }]}>
                             </FontAwesome5>
-                        )}
-                </TouchableOpacity>
-            </View>
+                        ) : (
+                                <FontAwesome5
+                                    name='play'
+                                    size={32}
+                                    color='#3D425C'
+                                    style={[styles.playButton, { marginLeft: 5 }]}>
+                                </FontAwesome5>
+                            )}
+                    </TouchableOpacity>
+                </View>
             </SafeAreaView >
         );
     }

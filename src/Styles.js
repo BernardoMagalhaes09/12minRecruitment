@@ -63,10 +63,12 @@ const styles = StyleSheet.create({
         color: '#B6B7BF'
     },
     text: {
-        color: '#8E97A6'
+        color: '#8E97A6',
+        textAlign: 'center'
     },
     textDark: {
-        color: '#3D425C'
+        color: '#3D425C',
+        textAlign: 'center'
     },
     coverContainer: {
         marginTop: 20,
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 32,
         shadowColor: '#5D3F6A',
         shadowRadius: 30,
-        shadowOpacity: 0.5
+        shadowOpacity: 0.5,
     },
     playButtonContainer2: {
         backgroundColor: '#FFF',
@@ -111,11 +113,24 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         shadowColor: '#3f51b5',
         shadowRadius: 30,
-        shadowOpacity: 0.5
+        shadowOpacity: 0.5,
     },
     backButton:{
         margin: 10
-    }
+    },
+    track: {
+        height: 3,
+        borderRadius: 1,
+        backgroundColor: "#FFF",
+        width: '100%',
+        marginHorizontal: 3
+    },
+    thumb: {
+        width: 8,
+        height: 6,
+        backgroundColor: "#3D425C",
+        marginHorizontal: 3
+    },
 })
 
 export default styles
