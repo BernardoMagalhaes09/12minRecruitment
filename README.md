@@ -38,6 +38,9 @@ The purpose of this application is to bring knowledge to people in minutes. Just
 <img src="https://i.ibb.co/vDp2cpx/List-Sound.png" width="100px;" alt="ListSound"/>
 <img src="https://i.ibb.co/B2sLcLv/Player-Sound.png" width="100px;" alt="PlayerSound"/>
 </p>
+<p>On the first screen, by clicking on the name of the ebook, more information about the book will appear</p>
+<p>Pressing Play will switch to the audio player screen and start audio automatically</p>
+<p>You can go back to the screen to choose a new ebook</p>
 
 # Author
 
