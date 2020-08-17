@@ -31,6 +31,7 @@ class SoundPlayer extends Component {
             setTimeout(async () => {
                 const soundStatus = await soundObject.getStatusAsync()
                 this.setState({status: soundStatus})
+                this.setState({ timeRemaining: this.time_convert(soundStatus.durationMillis/1000) })
                 }, 300)
         } catch (err) {
             console.log('err: ', err);
@@ -39,9 +40,14 @@ class SoundPlayer extends Component {
         console.log('err: ', err);
     }
 
-    changeTime = () => {
-        this.setState({ timeElapsed: Moment.utc(this.state.seconds * 1000).format('m:ss') })
-        this.setState({ timeRemaining: Moment.utc((this.state.trackLength - this.state.seconds) * 1000).format('m:ss') })
+    time_convert(num) {
+        var minutes = Math.floor(num / 60);
+        var seconds = num % 60;
+        if (seconds<10) {
+            seconds = 0+`${seconds.toFixed(0)}`
+            return minutes + ":" + seconds;
+        }
+        return minutes + ":" + seconds.toFixed(0);
     }
 
     playPause = () => {
